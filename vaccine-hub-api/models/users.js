@@ -14,9 +14,11 @@ class User {
         throw new BadRequestError("Missing ${field} in request body.");
       }
     });
-    const user = await user.fetchUserByEmail(credentials.email);
+    console.log("1")
+    const user = await User.fetchUserByEmail(credentials.email);
+    console.log("2")
     if (user) {
-      const isValid = await brypt.compare(credentials.password, user.password);
+      const isValid = await bcrypt.compare(credentials.password, user.password);
       if (isValid) {
         return user;
       }
