@@ -5,8 +5,21 @@ const { useScrollTrigger } = require("@material-ui/core")
 const {BCRYPT_WORK_FACTOR}=require('../config')
 class User{
     static async login(credentials){
-        //user should submit their email and password
-        //if any of these fields are missing, throw an error
+
+  const requiredFields=["email","password"]
+  requiredFields.forEach(field=>{
+    if(!credentials.hasOwnProperty(field)){
+        throw new BadRequestError('Missing ${field} in request body.')
+
+    }
+  })
+  const user=await user.fetchUserByEmail(credentials.email)
+  if(user){
+    const isValid=await brypt.compare(credentials.password,user.password)
+    if(isValid){
+        return user
+    }
+  }
      throw new unauthorizedError("Invalid email/password")
     }
 
