@@ -1,4 +1,5 @@
 const {unauthorizedError}=require("../utils/errors")
+const db=require("../db")
 class User{
     static async login(credentials){
         //user should submit their email and password

@@ -1,4 +1,5 @@
-require("dotenv").config()
+//require("dotenv").config()
+const dotenv=require("dotenv")
 require("colors")
 
 const PORT=process.env.PORT ? Number(process.env.PORT):3001
