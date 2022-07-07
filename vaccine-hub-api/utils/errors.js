@@ -16,5 +16,10 @@ class ExpressError extends Error {
       super("Not FOUND", 404);
     }
   }
+  class unauthorizedError extends ExpressError {
+    constructor() {
+      super("unauthorized", 401);
+    }
+  }
   
-  module.exports = { BadRequestError, ExpressError, NotFoundError };
+  module.exports = { BadRequestError, ExpressError, NotFoundError, unauthorizedError };
