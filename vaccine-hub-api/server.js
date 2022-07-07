@@ -12,8 +12,15 @@ app.use(morgan("tiny"));
 app.use(express.json());
 // app.use(nodemon());
 app.use("/auth", auth);
-app.use((err, res, next) => {
+app.use((req, res, next) => {
   return next(new NotFoundError());
+});
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "something went wrong";
+  const error = { status, message };
+
+  return res.status(status).json({ error: { message, status } });
 });
 
 const port = process.env.PORT || 3001;
