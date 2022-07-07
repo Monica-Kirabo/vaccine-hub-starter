@@ -1,6 +1,8 @@
+const brypt=require("bcrypt")
 const { unauthorizedError, BadRequestError}=require("../utils/errors")
 const db=require("../db")
 const { useScrollTrigger } = require("@material-ui/core")
+const {BCRYPT_WORK_FACTOR}=require('../config')
 class User{
     static async login(credentials){
         //user should submit their email and password
@@ -20,8 +22,9 @@ class User{
   if(existingUser){
     throw new BadRequestError('Duplicate email: ${credentials.email}')
   }
+  const hashedPassword=await BCRYPT_WORK_FACTOR.hash(credentials.password,BCRYPT_WORK_FACTOR)
 const lowercaseEmail=credentials.email.toLowerCase()
-const result=await db.query(' INSERT INTO users(email,password,rsvp_status,num_guests,created_at) VALUES($1,$2,$3,$4) RETURNING id,email,rsvp_status,num_guests,created_at ',[lowercaseEmail,credentials.password,credentials.rsvpstatus,credentials.numGuests])
+const result=await db.query(' INSERT INTO users(email,password,rsvp_status,num_guests,created_at) VALUES($1,$2,$3,$4) RETURNING id,email,rsvp_status,num_guests,created_at ',[lowercaseEmail,hashedPassword,credentials.rsvpstatus,credentials.numGuests])
 const user=result.rows[0]
 return user
 
